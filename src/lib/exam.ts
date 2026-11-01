@@ -14,8 +14,30 @@ export function buildExam(cfg: ExamConfig): Question[] {
     seen.add(q.prompt)
     out.push(q)
   }
-  return shuffled(out)
+  return groupByPassage(shuffled(out))
+}
+
+/** الأسئلة المرتبطة بنص واحد تتجاور، فيُقرأ النص مرة واحدة تقريباً */
+function groupByPassage(list: Question[]): Question[] {
+  const groups = new Map<string, Question[]>()
+  list.forEach((q, i) => {
+    const key = q.passage ? `p:${q.passage.text}` : `q:${i}`
+    const g = groups.get(key)
+    if (g) g.push(q)
+    else groups.set(key, [q])
+  })
+  return [...groups.values()].flat()
 }
 
 export const isPassed = (score: number, total: number, passPercent: number) =>
   total > 0 && score * 100 >= passPercent * total
+
+export function correctAnswerOf(q: Question): string {
+  if (q.kind === 'choice') return q.choices.find((c) => c.correct)?.text ?? ''
+  return Array.isArray(q.answer) ? q.answer[0] : q.answer
+}
+
+export function explanationOf(q: Question): string {
+  if (q.kind === 'choice') return q.choices.find((c) => c.correct)?.why ?? ''
+  return q.why
+}

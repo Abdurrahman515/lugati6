@@ -19,11 +19,13 @@ export interface Progress {
   stars: Record<string, number>
   mistakes: Mistake[]
   exams: Record<string, ExamResult[]>
+  /** وقت انتهاء قفل الاختبار (بالمللي ثانية) بعد الرسوب */
+  locks: Record<string, number>
 }
 
 const KEY = 'lugha-app:v1'
 
-const empty = (): Progress => ({ version: 1, stars: {}, mistakes: [], exams: {} })
+const empty = (): Progress => ({ version: 1, stars: {}, mistakes: [], exams: {}, locks: {} })
 
 function asRecord<T>(v: unknown): Record<string, T> {
   return typeof v === 'object' && v !== null && !Array.isArray(v) ? (v as Record<string, T>) : {}
@@ -38,6 +40,7 @@ function sanitize(raw: unknown): Progress | null {
     stars: asRecord<number>(r.stars),
     mistakes: Array.isArray(r.mistakes) ? (r.mistakes as Mistake[]) : [],
     exams: asRecord<ExamResult[]>(r.exams),
+    locks: asRecord<number>(r.locks),
   }
 }
 
@@ -110,8 +113,18 @@ export function importProgress(text: string): boolean {
   }
 }
 
-export function recordExam(examId: string, r: Omit<ExamResult, 'at'>): void {
+/** يسجّل نتيجة اختبار، ويقفله lockHours ساعة إن لم تنجح الطالبة */
+export function recordExam(examId: string, r: Omit<ExamResult, 'at'>, lockHours?: number): void {
   const p = getProgress()
   const list = [...(p.exams[examId] ?? []), { ...r, at: Date.now() }].slice(-20)
-  commit({ ...p, exams: { ...p.exams, [examId]: list } })
+  const locks = { ...p.locks }
+  if (!r.passed && lockHours) locks[examId] = Date.now() + lockHours * 3600000
+  else delete locks[examId]
+  commit({ ...p, exams: { ...p.exams, [examId]: list }, locks })
+}
+
+/** المدة المتبقية من قفل الاختبار بالمللي ثانية (٠ إن لم يكن مقفلاً) */
+export function lockRemaining(examId: string): number {
+  const until = getProgress().locks[examId] ?? 0
+  return Math.max(0, until - Date.now())
 }

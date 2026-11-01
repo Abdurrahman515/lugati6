@@ -4,11 +4,17 @@ export interface Choice {
   why: string
 }
 
+export interface QuestionPassage {
+  title?: string
+  text: string
+}
+
 export interface ChoiceQuestion {
   kind: 'choice'
   id: string
   prompt: string
   choices: Choice[]
+  passage?: QuestionPassage
 }
 
 export interface WrongAnswer {
@@ -25,6 +31,7 @@ export interface WrittenQuestion {
   wrong?: WrongAnswer[]
   /** إن كانت المهارة المختبرة إملائية بذاتها تُقارَن الهمزات والتاء والألف المقصورة بدقة */
   exactSpelling?: boolean
+  passage?: QuestionPassage
 }
 
 export type Question = ChoiceQuestion | WrittenQuestion
@@ -58,6 +65,8 @@ export interface ExamConfig {
   passPercent: number
   /** مولّدات الأسئلة: يُوزَّع الاختبار عليها بالتساوي تقريباً */
   makers: (() => Question)[]
+  strict?: boolean
+  lockHours?: number
 }
 
 export interface Station {
@@ -82,6 +91,8 @@ export interface Semester {
   title: string
   emoji: string
   units: Unit[]
+  midterm?: ExamConfig
+  final?: ExamConfig
 }
 
 export interface WidgetProps {

@@ -3,6 +3,8 @@ import type { WidgetProps } from '../types'
 import { shuffled } from '../lib/random'
 import { toArabicDigits } from '../lib/arabicDigits'
 import { RichText } from '../components/RichText'
+import { oopsLine, praiseLine } from '../lib/feedback'
+
 
 export interface OrderItem {
   text: string
@@ -51,7 +53,7 @@ export function OrderWidget({ data, onDone }: WidgetProps) {
 
   const finish = () => {
     setFinished(true)
-    setMsg({ ok: true, text: d.doneText ?? 'ترتيب ممتاز! 🎉' })
+    setMsg({ ok: true, text: d.doneText ? `${praiseLine()}\n${d.doneText}` : 'ترتيب ممتاز! 🎉' })
     onDone()
   }
 
@@ -65,7 +67,7 @@ export function OrderWidget({ data, onDone }: WidgetProps) {
     const first = d.items[order[wrong[0]]]
     setMsg({
       ok: false,
-      text: `«${first.text}» مو بمكانها. ${first.why ?? 'فكّري شو لازم يصير قبلها وشو بعدها.'}`,
+      text: `${oopsLine()}\n«${first.text}» مو بمكانها. ${first.why ?? 'فكّري شو لازم يصير قبلها وشو بعدها.'}`,
     })
   }
 

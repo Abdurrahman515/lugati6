@@ -3,6 +3,8 @@ import { motion } from 'framer-motion'
 import type { WidgetProps } from '../types'
 import { shuffled } from '../lib/random'
 import { RichText } from '../components/RichText'
+import { oopsLine, praiseLine } from '../lib/feedback'
+
 
 export interface SortBucket {
   id: string
@@ -41,9 +43,12 @@ export function SortWidget({ data, onDone }: WidgetProps) {
     setTries((t) => t + 1)
     if (bucketId === item.bucket) {
       setPlaced((p) => ({ ...p, [bucketId]: [...(p[bucketId] ?? []), item.text] }))
-      setFb({ ok: true, text: item.why })
+      setFb({ ok: true, text: `**${praiseLine()}**\n${item.why}` })
     } else {
-      setFb({ ok: false, text: item.whyNot[bucketId] ?? 'ليس هذا هو التصنيف الصحيح، فكّري مرة ثانية.' })
+      setFb({
+        ok: false,
+        text: `**${oopsLine()}**\n${item.whyNot[bucketId] ?? 'ليس هذا هو التصنيف الصحيح، فكّري مرة ثانية.'}`,
+      })
     }
   }
 

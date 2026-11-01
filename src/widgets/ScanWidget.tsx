@@ -2,6 +2,8 @@ import { useState } from 'react'
 import type { WidgetProps } from '../types'
 import { toArabicDigits } from '../lib/arabicDigits'
 import { RichText } from '../components/RichText'
+import { oopsLine, praiseLine } from '../lib/feedback'
+
 
 export interface ScanRound {
   goal: string
@@ -38,7 +40,7 @@ export function ScanWidget({ data, onDone }: WidgetProps) {
       setMsg(r.found)
     } else {
       setMissCount((n) => n + 1)
-      setMsg(r.misses?.[i] ?? 'هاي معلومة مش هدفك. ما توقفي عندها وكملي تمشيط 🏃‍♀️')
+      setMsg(r.misses?.[i] ? `${oopsLine()}\n${r.misses?.[i]}` : 'هاي معلومة مش هدفك. ما توقفي عندها وكملي تمشيط 🏃‍♀️')
     }
   }
 
@@ -58,6 +60,8 @@ export function ScanWidget({ data, onDone }: WidgetProps) {
     return (
       <div className="card scan">
         <p className="ok-note">
+          {praiseLine()}
+          <br />
           خلّصتِ كل الجولات! 🎉 عدد المرات اللي وقفتِ فيها عند سطر مش هدفك: {toArabicDigits(missCount)}. كل ما قلّت، صار تمشيطك أشطر 💪
         </p>
       </div>
