@@ -6,6 +6,7 @@ import { lockRemaining, useProgress } from '../lib/store'
 import type { Progress } from '../lib/store'
 import { Collapsible } from './Collapsible'
 import { ProgressTools } from './ProgressTools'
+import React from 'react'
 
 function ExamLink({ exam, progress }: { exam: ExamConfig; progress: Progress }) {
   const attempts = progress.exams[exam.id] ?? []
@@ -54,7 +55,7 @@ export function Home() {
             <div key={u.id} className="unit">
               <h2 className="unit-title">الوحدة: {u.title}</h2>
               {u.stations.map((st, i) => (
-                <>
+                <React.Fragment key={st.id}>
                   {i === 3 && sem.midterm && <ExamLink exam={sem.midterm} progress={progress} />}
 
                   <Collapsible
@@ -86,7 +87,7 @@ export function Home() {
                     )}
                     {st.review && st.lessons.length > 0 && <ExamLink exam={st.review} progress={progress} />}
                   </Collapsible>
-                </>
+                </React.Fragment>
               ))}
             </div>
           ))}

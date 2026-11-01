@@ -20,7 +20,7 @@ export const CASES: Case[] = ['raf', 'nasb', 'jarr']
 export const CASE_LABEL: Record<Case, string> = { raf: 'الرفع', nasb: 'النصب', jarr: 'الجر' }
 const ROLES: Role[] = ['فاعل', 'مفعول به', 'مبتدأ', 'خبر', 'اسم مجرور']
 
-const FORM_LABEL: Record<NounForm, string> = {
+export const FORM_LABEL: Record<NounForm, string> = {
   single: 'اسم مفرد',
   broken: 'جمع تكسير',
   femSound: 'جمع مؤنث سالم',
@@ -29,7 +29,7 @@ const FORM_LABEL: Record<NounForm, string> = {
   five: 'من الأسماء الخمسة',
 }
 
-const SIGN_TABLE: Record<NounForm, Record<Case, Sign>> = {
+export const SIGN_TABLE: Record<NounForm, Record<Case, Sign>> = {
   single: { raf: 'damma', nasb: 'fatha', jarr: 'kasra' },
   broken: { raf: 'damma', nasb: 'fatha', jarr: 'kasra' },
   femSound: { raf: 'damma', nasb: 'kasra', jarr: 'kasra' },

@@ -4,6 +4,7 @@ import { SortWidget } from './SortWidget'
 import { OrderWidget } from './OrderWidget'
 import { ScanWidget } from './ScanWidget'
 import { DuelWidget } from './DuelWidget'
+import { ParseWidget } from './ParseWidget'
 
 /** أي أداة جديدة تُسجَّل هنا بمعرّف نصي، وإلا لا يستدعيها الدرس */
 export const widgets: Record<string, ComponentType<WidgetProps>> = {
@@ -11,4 +12,5 @@ export const widgets: Record<string, ComponentType<WidgetProps>> = {
   order: OrderWidget,
   scan: ScanWidget,
   duel: DuelWidget,
+  parse: ParseWidget,
 }
