@@ -3,6 +3,8 @@ import { findExam, findLesson } from './content'
 import { ExamView } from './components/ExamView'
 import { Home } from './components/Home'
 import { LessonRunner } from './components/LessonRunner'
+import { SpeedPage } from './components/SpeedView'
+
 
 function subscribeHash(callback: () => void) {
   window.addEventListener('hashchange', callback)
@@ -19,8 +21,10 @@ export default function App() {
   const lesson = lessonMatch ? findLesson(decodeURIComponent(lessonMatch[1])) : undefined
   const examMatch = /^#\/exam\/(.+)$/.exec(hash)
   const exam = examMatch ? findExam(decodeURIComponent(examMatch[1])) : undefined
+  const speedMatch = /^#\/speed\/(.+)$/.exec(hash)
 
   if (lesson) return <LessonRunner key={lesson.id} lesson={lesson} onExit={goHome} />
   if (exam) return <ExamView key={exam.id} exam={exam} onExit={goHome} />
+  if (speedMatch) return <SpeedPage id={decodeURIComponent(speedMatch[1])} />
   return <Home />
 }

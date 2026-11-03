@@ -14,6 +14,12 @@ export interface ExamResult {
   passed: boolean
 }
 
+export interface SpeedBest {
+  score: number
+  total: number
+  at: number
+}
+
 export interface Progress {
   version: 1
   stars: Record<string, number>
@@ -21,11 +27,12 @@ export interface Progress {
   exams: Record<string, ExamResult[]>
   /** وقت انتهاء قفل الاختبار (بالمللي ثانية) بعد الرسوب */
   locks: Record<string, number>
+  speed: Record<string, SpeedBest>
 }
 
 const KEY = 'lugha-app:v1'
 
-const empty = (): Progress => ({ version: 1, stars: {}, mistakes: [], exams: {}, locks: {} })
+const empty = (): Progress => ({ version: 1, stars: {}, mistakes: [], exams: {}, locks: {}, speed: {} })
 
 function asRecord<T>(v: unknown): Record<string, T> {
   return typeof v === 'object' && v !== null && !Array.isArray(v) ? (v as Record<string, T>) : {}
@@ -41,6 +48,7 @@ function sanitize(raw: unknown): Progress | null {
     mistakes: Array.isArray(r.mistakes) ? (r.mistakes as Mistake[]) : [],
     exams: asRecord<ExamResult[]>(r.exams),
     locks: asRecord<number>(r.locks),
+    speed: asRecord<SpeedBest>(r.speed),
   }
 }
 
@@ -127,4 +135,14 @@ export function recordExam(examId: string, r: Omit<ExamResult, 'at'>, lockHours?
 export function lockRemaining(examId: string): number {
   const until = getProgress().locks[examId] ?? 0
   return Math.max(0, until - Date.now())
+}
+
+
+/** يحفظ نتيجة السرعة إن كانت أفضل من السابقة. يُرجع true إن كانت الأفضل */
+export function recordSpeed(toolId: string, score: number, total: number): boolean {
+  const p = getProgress()
+  const prev = p.speed[toolId]
+  if (prev && score <= prev.score) return false
+  commit({ ...p, speed: { ...p.speed, [toolId]: { score, total, at: Date.now() } } })
+  return true
 }

@@ -8,6 +8,7 @@ import { Collapsible } from './Collapsible'
 import { ProgressTools } from './ProgressTools'
 import React, { useState } from 'react'
 import { CertificatePrompt } from './CertificatePrompt'
+import { speedTools } from '../speed'
 
 
 function ExamLink({ exam, progress }: { exam: ExamConfig; progress: Progress }) {
@@ -57,7 +58,9 @@ function ExamLink({ exam, progress }: { exam: ExamConfig; progress: Progress }) 
 }
 
 export function Home() {
-  const progress = useProgress()
+  const progress = useProgress();
+  const readySpeed = speedTools.filter((t) => t.makers.length > 0)
+
   return (
     <main className="home">
       <header className="hero">
@@ -112,6 +115,29 @@ export function Home() {
           {sem.final && <ExamLink exam={sem.final} progress={progress} />}
         </Collapsible>
       ))}
+
+      {readySpeed.length > 0 && (
+        <Collapsible id="speed" title="تمارين السرعة" emoji="⚡" defaultCollapsed={false}>
+          <p className="muted">٣٠ سؤالاً، ١٠ ثوانٍ لكل سؤال. بلا قفل، وتُحفظ أفضل نتيجة.</p>
+          <ul className="lessons">
+            {readySpeed.map((t) => {
+              const b = progress.speed[t.id]
+              return (
+                <li key={t.id}>
+                  <a className="lesson-link" href={`#/speed/${t.id}`}>
+                    <span>
+                      {t.emoji} {t.title}
+                    </span>
+                    <span className="muted">
+                      {b ? `أفضل نتيجة ${toArabicDigits(b.score)} من ${toArabicDigits(b.total)}` : 'لم تُجرَّب بعد'}
+                    </span>
+                  </a>
+                </li>
+              )
+            })}
+          </ul>
+        </Collapsible>
+      )}
 
       <ProgressTools />
     </main>

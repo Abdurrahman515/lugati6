@@ -578,3 +578,66 @@ code {
   margin: 0.4rem 0 1rem;
   text-align: center;
 }
+
+.speed-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+.speed-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.speed-timer {
+  font-weight: 700;
+  font-size: 1.4em;
+}
+.speed-timer.low {
+  color: #e03131;
+}
+.speed-bar {
+  height: 0.7rem;
+  border-radius: 999px;
+  background: rgba(128, 128, 128, 0.25);
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+.speed-bar > span {
+  display: block;
+  height: 100%;
+  background: #2f9e44;
+  border-radius: 999px;
+  transition: width 0.1s linear;
+}
+.speed-bar.low > span {
+  background: #e03131;
+}
+.speed-score {
+  font-size: 2.2em;
+  font-weight: 800;
+  text-align: center;
+}
+.speed-center {
+  text-align: center;
+}
+.speed-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+.speed-result-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+.speed-miss {
+  border: 1px solid rgba(128, 128, 128, 0.35);
+  border-radius: 12px;
+  padding: 0.75rem;
+}
