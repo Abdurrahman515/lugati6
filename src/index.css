@@ -1,3 +1,8 @@
+@import '@fontsource/noto-naskh-arabic/arabic-400.css';
+@import '@fontsource/noto-naskh-arabic/arabic-700.css';
+@import '@fontsource/noto-naskh-arabic/latin-400.css';
+@import '@fontsource/noto-naskh-arabic/latin-700.css';
+
 :root {
   --brand: #5b5bd6;
   --brand-dark: #4343b8;
@@ -12,9 +17,9 @@
   --bad-bg: #fdeceb;
   --mark: #fff0a8;
   --radius: 18px;
-  font-family: 'Segoe UI', Tahoma, 'Noto Naskh Arabic', 'Geeza Pro', system-ui, sans-serif;
-  font-size: 18px;
-  line-height: 1.9;
+  font-family: 'Noto Naskh Arabic', 'Amiri', 'Geeza Pro', 'Traditional Arabic', serif;
+  font-size: 19px;
+  line-height: 2;
   color: var(--ink);
   background: var(--bg);
 }
@@ -33,6 +38,12 @@ body {
 button {
   font: inherit;
   cursor: pointer;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
 }
 
 button:disabled {
@@ -488,7 +499,7 @@ code {
 
 @media (max-width: 480px) {
   :root {
-    font-size: 17px;
+    font-size: 18px;
   }
 
   .buckets {
@@ -536,3 +547,34 @@ code {
 .parse-word.done-ism, .parse-word.done-faail { background: var(--ok-bg); color: var(--ok); }
 .parse-word.done-khabar { background: var(--bad-bg); color: var(--bad); }
 .parse-word.done-mafool { background: var(--brand-soft); color: var(--brand-dark); }
+
+.cert-box {
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 16px;
+  background: #fdf2f8;
+  border: 2px dashed #f472b6;
+  text-align: center;
+}
+.cert-input {
+  width: 100%;
+  max-width: 360px;
+  margin: 0.5rem auto;
+  padding: 0.7rem 1rem;
+  font: inherit;
+  font-size: 1.1rem;
+  text-align: center;
+  border: 2px solid #f9a8d4;
+  border-radius: 12px;
+  background: #fff;
+}
+.cert-input:focus {
+  outline: none;
+  border-color: #ec4899;
+}
+
+
+.cert-home {
+  margin: 0.4rem 0 1rem;
+  text-align: center;
+}

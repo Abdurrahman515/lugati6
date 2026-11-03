@@ -6,9 +6,12 @@ import { lockRemaining, useProgress } from '../lib/store'
 import type { Progress } from '../lib/store'
 import { Collapsible } from './Collapsible'
 import { ProgressTools } from './ProgressTools'
-import React from 'react'
+import React, { useState } from 'react'
+import { CertificatePrompt } from './CertificatePrompt'
+
 
 function ExamLink({ exam, progress }: { exam: ExamConfig; progress: Progress }) {
+  const [certOpen, setCertOpen] = useState(false)
   const attempts = progress.exams[exam.id] ?? []
   const best = attempts.reduce<number | null>((m, a) => {
     const pct = a.total > 0 ? Math.round((a.score * 100) / a.total) : 0
@@ -16,26 +19,40 @@ function ExamLink({ exam, progress }: { exam: ExamConfig; progress: Progress }) 
   }, null)
   const everPassed = attempts.some((a) => a.passed)
   const lockMs = exam.lockHours ? lockRemaining(exam.id) : 0
+  /** الشهادة لاختباري المنتصف والنهاية فقط (`strict`) بعد نجاح مسجَّل */
+  const canCertificate = Boolean(exam.strict) && everPassed
 
-  if (lockMs > 0) {
-    return (
+  const link =
+    lockMs > 0 ? (
       <div className="lesson-link exam-link locked" aria-disabled="true">
         <span>
           {exam.emoji} {exam.title}
         </span>
         <span className="muted">🔒 مقفل {formatRemaining(lockMs)}</span>
       </div>
+    ) : (
+      <a className="lesson-link exam-link" href={`#/exam/${exam.id}`}>
+        <span>
+          {exam.emoji} {exam.title}
+        </span>
+        <span className="muted">
+          {best === null ? 'لم تُحَلّ بعد' : `${everPassed ? '✅ ' : ''}أفضل نتيجة ${toArabicDigits(best)}٪`}
+        </span>
+      </a>
     )
-  }
+
   return (
-    <a className="lesson-link exam-link" href={`#/exam/${exam.id}`}>
-      <span>
-        {exam.emoji} {exam.title}
-      </span>
-      <span className="muted">
-        {best === null ? 'لم تُحَلّ بعد' : `${everPassed ? '✅ ' : ''}أفضل نتيجة ${toArabicDigits(best)}٪`}
-      </span>
-    </a>
+    <>
+      {link}
+      {canCertificate && (
+        <div className="cert-home">
+          <button className="secondary" onClick={() => setCertOpen((o) => !o)}>
+            {certOpen ? 'إخفاء الشهادة' : '🎓 اطبعي شهادة الشكر والتقدير'}
+          </button>
+          {certOpen && <CertificatePrompt examTitle={exam.title} />}
+        </div>
+      )}
+    </>
   )
 }
 

@@ -8,6 +8,8 @@ import { toArabicDigits } from '../lib/arabicDigits'
 import { formatRemaining } from '../lib/time'
 import { QuestionView } from './QuestionView'
 import { RichText } from './RichText'
+import { CertificatePrompt } from './CertificatePrompt'
+
 
 interface Summary {
   score: number
@@ -76,6 +78,7 @@ function ExamRun({ exam, onExit, onRetry }: { exam: ExamConfig; onExit: () => vo
             أجبتِ صح من أول مرة على {toArabicDigits(summary.score)} من {toArabicDigits(summary.total)} (
             {toArabicDigits(percent)}٪). حد النجاح {toArabicDigits(exam.passPercent)}٪.
           </p>
+          {summary.passed && exam.strict && <CertificatePrompt examTitle={exam.title} />}
           {locked && (
             <p className="muted">
               🔒 الاختبار انقفل {toArabicDigits(exam.lockHours ?? 0)} ساعة. راجعي أخطاءك تحت وارجعي أقوى!

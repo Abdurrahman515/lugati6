@@ -1,4 +1,4 @@
-import type { ExamConfig, Lesson, Question, Semester } from '../types'
+import type { ExamConfig, Lesson, Semester } from '../types'
 import { lesson11 } from './lesson-1-1'
 import { lesson12 } from './lesson-1-2'
 import { lesson13 } from './lesson-1-3'
@@ -36,6 +36,9 @@ import { lesson56 } from './lesson-5-6'
 import { lesson57 } from './lesson-5-7'
 import { lesson58 } from './lesson-5-8'
 import { station5ReviewMakers } from './banks/station5Review'
+import { semester2 } from './s2/semester2'
+import { spread } from '../lib/spread'
+
 
 const station2Review: ExamConfig = {
   id: 'review-st2',
@@ -73,10 +76,6 @@ const station5Review: ExamConfig = {
   makers: station5ReviewMakers,
 }
 
-/** يكرّر المولّدات دورياً حتى يبلغ عدد الخانات المطلوب، فيتوازن وزن كل محطة مهما كان عدد مولّداتها */
-function spread(makers: (() => Question)[], slots: number): (() => Question)[] {
-  return Array.from({ length: slots }, (_, i) => makers[i % makers.length])
-}
 
 /** يشمل المحطات ١ و٢ و٣ (ص١١–٨٤). مولّد المحطة ١ المختلط يتكرر لتوازن التوزيع */
 const midterm1: ExamConfig = {
@@ -133,6 +132,8 @@ export const semesters: Semester[] = [
       },
     ],
   },
+
+  semester2
 ]
 
 export const allLessons: Lesson[] = semesters.flatMap((s) =>
