@@ -2,7 +2,7 @@ import type { ChoiceQuestion, Question } from '../types'
 import { shuffled } from './random'
 
 export const SPEED_COUNT = 30
-export const SPEED_SECONDS = 10
+export const SPEED_SECONDS = 30
 const MAX_CHOICES = 4
 
 export type SpeedMaker = () => Question
