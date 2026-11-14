@@ -30,7 +30,7 @@ export interface Progress {
   speed: Record<string, SpeedBest>
 }
 
-const KEY = 'lugha-6-app:v1'
+const KEY = 'lugha-app:v1'
 
 const empty = (): Progress => ({ version: 1, stars: {}, mistakes: [], exams: {}, locks: {}, speed: {} })
 
